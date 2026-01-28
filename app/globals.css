@@ -80,40 +80,57 @@
   --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
   --sidebar-border: oklch(0.923 0.003 48.717);
   --sidebar-ring: oklch(0.709 0.01 56.259);
+  --glow-primary: oklch(0.65 0.2 25 / 40%);
+  --glow-primary-strong: oklch(0.65 0.2 25 / 60%);
 }
 
 .dark {
-  --background: oklch(0.147 0.004 49.25);
-  --foreground: oklch(0.985 0.001 106.423);
-  --card: oklch(0.216 0.006 56.043);
-  --card-foreground: oklch(0.985 0.001 106.423);
-  --popover: oklch(0.216 0.006 56.043);
-  --popover-foreground: oklch(0.985 0.001 106.423);
-  --primary: oklch(0.77 0.16 70);
-  --primary-foreground: oklch(0.28 0.07 46);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.268 0.007 34.298);
-  --muted-foreground: oklch(0.709 0.01 56.259);
-  --accent: oklch(0.268 0.007 34.298);
-  --accent-foreground: oklch(0.985 0.001 106.423);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.553 0.013 58.071);
-  --chart-1: oklch(0.88 0.15 92);
-  --chart-2: oklch(0.77 0.16 70);
-  --chart-3: oklch(0.67 0.16 58);
-  --chart-4: oklch(0.56 0.15 49);
-  --chart-5: oklch(0.47 0.12 46);
-  --sidebar: oklch(0.216 0.006 56.043);
-  --sidebar-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-primary: oklch(0.77 0.16 70);
-  --sidebar-primary-foreground: oklch(0.28 0.07 46);
-  --sidebar-accent: oklch(0.268 0.007 34.298);
-  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.553 0.013 58.071);
+  /* Near-black backgrounds - Dovetail style */
+  --background: oklch(0.09 0.005 30);
+  --foreground: oklch(0.98 0 0);
+
+  /* Elevated card surfaces */
+  --card: oklch(0.13 0.006 30);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.13 0.006 30);
+  --popover-foreground: oklch(0.98 0 0);
+
+  /* Coral/orange accent (Dovetail signature) */
+  --primary: oklch(0.65 0.2 25);
+  --primary-foreground: oklch(0.98 0 0);
+
+  /* Subtle surfaces */
+  --secondary: oklch(0.18 0.005 30);
+  --secondary-foreground: oklch(0.9 0 0);
+  --muted: oklch(0.16 0.004 30);
+  --muted-foreground: oklch(0.55 0.01 30);
+  --accent: oklch(0.18 0.006 30);
+  --accent-foreground: oklch(0.98 0 0);
+
+  --destructive: oklch(0.6 0.22 25);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.65 0.2 25);
+
+  /* Chart colors - coral gradient */
+  --chart-1: oklch(0.65 0.2 25);
+  --chart-2: oklch(0.72 0.18 35);
+  --chart-3: oklch(0.58 0.22 20);
+  --chart-4: oklch(0.75 0.15 45);
+  --chart-5: oklch(0.5 0.18 15);
+
+  /* Sidebar */
+  --sidebar: oklch(0.11 0.005 30);
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-primary: oklch(0.65 0.2 25);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.18 0.006 30);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.65 0.2 25);
+
+  --glow-primary: oklch(0.65 0.2 25 / 40%);
+  --glow-primary-strong: oklch(0.65 0.2 25 / 60%);
 }
 
 @layer base {
@@ -133,4 +150,41 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+}
+
+/* Grid background - Dovetail style */
+.bg-grid {
+  background-image:
+    linear-gradient(oklch(1 0 0 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 3%) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.bg-grid-subtle {
+  background-image:
+    linear-gradient(oklch(1 0 0 / 2%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 2%) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Glow utilities */
+.glow-primary {
+  box-shadow: 0 0 20px var(--glow-primary);
+}
+
+.hover\:glow-primary:hover {
+  box-shadow: 0 0 30px var(--glow-primary);
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--glow-primary); }
+  50% { box-shadow: 0 0 40px var(--glow-primary-strong); }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-glow-pulse { animation: none; }
 }

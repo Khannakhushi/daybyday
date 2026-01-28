@@ -18,7 +18,7 @@ export default function DashboardLayout({
           <div className="flex-1" />
           <ThemeToggle />
         </header>
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6 bg-grid">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );
