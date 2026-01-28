@@ -21,10 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Plus } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
 
-type JobStatus = "not_applied" | "applied" | "interviewing" | "offer" | "rejected";
+type JobStatus =
+  | "not_applied"
+  | "applied"
+  | "interviewing"
+  | "offer"
+  | "rejected";
 
 interface JobFormProps {
   job?: {
@@ -108,16 +114,15 @@ export function JobForm({ job, onClose }: JobFormProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <button
-        onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/80 h-9 px-4"
-      >
+      <Button onClick={() => setOpen(true)}>
         <Plus className="h-4 w-4 mr-2" />
         {job ? "Edit" : "Add Application"}
-      </button>
+      </Button>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>{job ? "Edit Application" : "Add Application"}</DialogTitle>
+          <DialogTitle>
+            {job ? "Edit Application" : "Add Application"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -144,7 +149,10 @@ export function JobForm({ job, onClose }: JobFormProps) {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select value={status} onValueChange={(v) => setStatus(v as JobStatus)}>
+              <Select
+                value={status}
+                onValueChange={(v) => setStatus(v as JobStatus)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -170,22 +178,12 @@ export function JobForm({ job, onClose }: JobFormProps) {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="dueDate">Due Date</Label>
-              <Input
-                id="dueDate"
-                type="date"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-              />
+              <Label>Due Date</Label>
+              <DatePicker value={dueDate} onChange={setDueDate} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="appliedDate">Applied Date</Label>
-              <Input
-                id="appliedDate"
-                type="date"
-                value={appliedDate}
-                onChange={(e) => setAppliedDate(e.target.value)}
-              />
+              <Label>Applied Date</Label>
+              <DatePicker value={appliedDate} onChange={setAppliedDate} />
             </div>
           </div>
 
@@ -221,10 +219,16 @@ export function JobForm({ job, onClose }: JobFormProps) {
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
-            <Button type="submit">{job ? "Save Changes" : "Add Application"}</Button>
+            <Button type="submit">
+              {job ? "Save Changes" : "Add Application"}
+            </Button>
           </div>
         </form>
       </DialogContent>
@@ -232,20 +236,21 @@ export function JobForm({ job, onClose }: JobFormProps) {
   );
 }
 
-// Separate edit button for use in dropdowns
 export function JobEditButton({
   job,
-  onEdit
+  onEdit,
 }: {
   job: JobFormProps["job"];
   onEdit: () => void;
 }) {
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="sm"
       onClick={onEdit}
-      className="focus:bg-accent focus:text-accent-foreground gap-2 rounded-sm px-2 py-1.5 text-sm relative flex cursor-default items-center outline-hidden select-none w-full"
+      className="w-full justify-start"
     >
       Edit
-    </button>
+    </Button>
   );
 }

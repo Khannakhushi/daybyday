@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useUser } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { Id } from "@/convex/_generated/dataModel";
@@ -84,9 +84,13 @@ function EditSubscriptionDialog({
 
   const [name, setName] = useState(subscription.name);
   const [amount, setAmount] = useState((subscription.amount / 100).toFixed(2));
-  const [billingCycle, setBillingCycle] = useState<BillingCycle>(subscription.billingCycle);
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>(
+    subscription.billingCycle,
+  );
   const [category, setCategory] = useState(subscription.category);
-  const [nextBillingDate, setNextBillingDate] = useState(subscription.nextBillingDate);
+  const [nextBillingDate, setNextBillingDate] = useState(
+    subscription.nextBillingDate,
+  );
   const [url, setUrl] = useState(subscription.url ?? "");
   const [notes, setNotes] = useState(subscription.notes ?? "");
 
@@ -148,7 +152,10 @@ function EditSubscriptionDialog({
             </div>
             <div className="space-y-2">
               <Label htmlFor="cycle">Billing Cycle</Label>
-              <Select value={billingCycle} onValueChange={(v) => setBillingCycle(v as BillingCycle)}>
+              <Select
+                value={billingCycle}
+                onValueChange={(v) => setBillingCycle(v as BillingCycle)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -164,7 +171,10 @@ function EditSubscriptionDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
-              <Select value={category} onValueChange={(v) => v && setCategory(v)}>
+              <Select
+                value={category}
+                onValueChange={(v) => v && setCategory(v)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -178,13 +188,10 @@ function EditSubscriptionDialog({
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="nextBilling">Next Billing *</Label>
-              <Input
-                id="nextBilling"
-                type="date"
+              <Label>Next Billing *</Label>
+              <DatePicker
                 value={nextBillingDate}
-                onChange={(e) => setNextBillingDate(e.target.value)}
-                required
+                onChange={setNextBillingDate}
               />
             </div>
           </div>
@@ -211,7 +218,11 @@ function EditSubscriptionDialog({
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
             <Button type="submit">Save Changes</Button>
@@ -251,15 +262,20 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
               onCheckedChange={() => toggleActive({ id: subscription._id })}
             />
             <DropdownMenu>
-              <DropdownMenuTrigger className="inline-flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground h-8 w-8">
-                <MoreHorizontal className="h-4 w-4" />
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setEditOpen(true)}>
                   <Pencil className="h-4 w-4 mr-2" />
                   Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDelete} className="text-destructive">
+                <DropdownMenuItem
+                  onClick={handleDelete}
+                  className="text-destructive"
+                >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete
                 </DropdownMenuItem>
@@ -275,7 +291,8 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
             </span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Next billing: {format(new Date(subscription.nextBillingDate), "MMM d, yyyy")}
+            Next billing:{" "}
+            {format(new Date(subscription.nextBillingDate), "MMM d, yyyy")}
           </p>
           {subscription.url && (
             <a

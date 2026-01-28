@@ -10,8 +10,18 @@ import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export function WorkoutCalendar() {
@@ -24,7 +34,7 @@ export function WorkoutCalendar() {
 
   const workouts = useQuery(
     api.workouts.getWorkouts,
-    userId ? { userId, month, year } : "skip"
+    userId ? { userId, month, year } : "skip",
   );
 
   const toggleWorkout = useMutation(api.workouts.toggleWorkout);
@@ -79,7 +89,10 @@ export function WorkoutCalendar() {
 
       <div className="grid grid-cols-7 gap-1 mb-2">
         {DAYS.map((day) => (
-          <div key={day} className="text-center text-sm text-muted-foreground py-2">
+          <div
+            key={day}
+            className="text-center text-sm text-muted-foreground py-2"
+          >
             {day}
           </div>
         ))}
@@ -95,23 +108,24 @@ export function WorkoutCalendar() {
           const future = isFuture(day);
 
           return (
-            <button
+            <Button
               key={day}
+              variant="ghost"
+              size="icon"
               onClick={() => !future && handleDayClick(day)}
               disabled={future}
               className={cn(
-                "aspect-square rounded-md flex items-center justify-center text-sm relative transition-colors",
+                "aspect-square h-auto w-auto rounded-md flex items-center justify-center text-sm relative transition-colors",
                 isToday(day) && "ring-2 ring-primary",
                 completed && "bg-green-500 text-white hover:bg-green-600",
-                !completed && !future && "hover:bg-accent",
-                future && "text-muted-foreground/50 cursor-not-allowed"
+                future && "text-muted-foreground/50 cursor-not-allowed",
               )}
             >
               {day}
               {completed && (
                 <Check className="h-3 w-3 absolute bottom-0.5 right-0.5" />
               )}
-            </button>
+            </Button>
           );
         })}
       </div>
