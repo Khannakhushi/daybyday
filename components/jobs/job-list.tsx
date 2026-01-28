@@ -35,13 +35,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { DatePicker } from "@/components/ui/date-picker";
 import { StatusBadge } from "./status-badge";
 import { JobForm } from "./job-form";
 import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { Id } from "@/convex/_generated/dataModel";
 
-type JobStatus = "not_applied" | "applied" | "interviewing" | "offer" | "rejected";
+type JobStatus =
+  | "not_applied"
+  | "applied"
+  | "interviewing"
+  | "offer"
+  | "rejected";
 
 type Job = {
   _id: Id<"jobApplications">;
@@ -56,7 +62,15 @@ type Job = {
   location?: string;
 };
 
-function EditJobDialog({ job, open, onOpenChange }: { job: Job; open: boolean; onOpenChange: (open: boolean) => void }) {
+function EditJobDialog({
+  job,
+  open,
+  onOpenChange,
+}: {
+  job: Job;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const { user } = useUser();
   const update = useMutation(api.jobApplications.update);
 
@@ -121,7 +135,10 @@ function EditJobDialog({ job, open, onOpenChange }: { job: Job; open: boolean; o
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select value={status} onValueChange={(v) => setStatus(v as JobStatus)}>
+              <Select
+                value={status}
+                onValueChange={(v) => setStatus(v as JobStatus)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -147,22 +164,12 @@ function EditJobDialog({ job, open, onOpenChange }: { job: Job; open: boolean; o
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="dueDate">Due Date</Label>
-              <Input
-                id="dueDate"
-                type="date"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-              />
+              <Label>Due Date</Label>
+              <DatePicker value={dueDate} onChange={setDueDate} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="appliedDate">Applied Date</Label>
-              <Input
-                id="appliedDate"
-                type="date"
-                value={appliedDate}
-                onChange={(e) => setAppliedDate(e.target.value)}
-              />
+              <Label>Applied Date</Label>
+              <DatePicker value={appliedDate} onChange={setAppliedDate} />
             </div>
           </div>
 
@@ -198,7 +205,11 @@ function EditJobDialog({ job, open, onOpenChange }: { job: Job; open: boolean; o
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
             <Button type="submit">Save Changes</Button>
@@ -216,11 +227,14 @@ export function JobList() {
   const [statusFilter, setStatusFilter] = useState<JobStatus | "all">("all");
   const [editingJob, setEditingJob] = useState<Job | null>(null);
 
-  const jobs = useQuery(api.jobApplications.getAll, userId ? { userId } : "skip");
+  const jobs = useQuery(
+    api.jobApplications.getAll,
+    userId ? { userId } : "skip",
+  );
   const removeJob = useMutation(api.jobApplications.remove);
 
   const filteredJobs = jobs?.filter(
-    (job) => statusFilter === "all" || job.status === statusFilter
+    (job) => statusFilter === "all" || job.status === statusFilter,
   );
 
   const handleDelete = async (id: string) => {
@@ -272,7 +286,10 @@ export function JobList() {
           <TableBody>
             {filteredJobs?.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                <TableCell
+                  colSpan={7}
+                  className="text-center text-muted-foreground py-8"
+                >
                   No applications yet. Add your first one!
                 </TableCell>
               </TableRow>
@@ -285,7 +302,9 @@ export function JobList() {
                   <StatusBadge status={job.status} />
                 </TableCell>
                 <TableCell>
-                  {job.dueDate ? format(new Date(job.dueDate), "MMM d, yyyy") : "-"}
+                  {job.dueDate
+                    ? format(new Date(job.dueDate), "MMM d, yyyy")
+                    : "-"}
                 </TableCell>
                 <TableCell>{job.location || "-"}</TableCell>
                 <TableCell>
@@ -305,8 +324,10 @@ export function JobList() {
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="inline-flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground h-8 w-8">
-                      <MoreHorizontal className="h-4 w-4" />
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => setEditingJob(job)}>

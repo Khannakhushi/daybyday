@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Plus } from "lucide-react";
 
 type BillingCycle = "monthly" | "yearly" | "weekly";
@@ -82,13 +83,10 @@ export function SubscriptionForm() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <button
-        onClick={() => setOpen(true)}
-        className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/80 h-9 px-4"
-      >
+      <Button onClick={() => setOpen(true)}>
         <Plus className="h-4 w-4 mr-2" />
         Add Subscription
-      </button>
+      </Button>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Add Subscription</DialogTitle>
@@ -126,7 +124,10 @@ export function SubscriptionForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="cycle">Billing Cycle</Label>
-              <Select value={billingCycle} onValueChange={(v) => setBillingCycle(v as BillingCycle)}>
+              <Select
+                value={billingCycle}
+                onValueChange={(v) => setBillingCycle(v as BillingCycle)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -142,7 +143,10 @@ export function SubscriptionForm() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
-              <Select value={category} onValueChange={(v) => v && setCategory(v)}>
+              <Select
+                value={category}
+                onValueChange={(v) => v && setCategory(v)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -156,13 +160,10 @@ export function SubscriptionForm() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="nextBilling">Next Billing *</Label>
-              <Input
-                id="nextBilling"
-                type="date"
+              <Label>Next Billing *</Label>
+              <DatePicker
                 value={nextBillingDate}
-                onChange={(e) => setNextBillingDate(e.target.value)}
-                required
+                onChange={setNextBillingDate}
               />
             </div>
           </div>
@@ -189,7 +190,11 @@ export function SubscriptionForm() {
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit">Add Subscription</Button>
